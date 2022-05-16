@@ -7,5 +7,8 @@ class Person:
         self.firstname = self.firstname[::-1]
         self.lastname = self.lastname[::-1]
 
-    def marry(self, other):
-        self.lastname += '-' + other.lastname
+    @staticmethod
+    def marry(l, r):
+        lastname = l.lastname
+        l.lastname += '-' + r.lastname
+        r.lastname += '-' + lastname
