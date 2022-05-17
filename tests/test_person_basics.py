@@ -2,13 +2,13 @@ import pytest
 from person import Person
 
 
-@pytest.mark.xfail
+#@pytest.mark.xfail
 def test_person_init_and_attributes():
     joerg = Person('1037190666', 'Joerg', 'Faschingbauer')
     assert joerg.firstname == 'Joerg'
     assert joerg.lastname == 'Faschingbauer'
 
-@pytest.mark.xfail
+#@pytest.mark.xfail
 def test_invert():
     joerg = Person('1037190666', 'Joerg', 'Faschingbauer')
 
