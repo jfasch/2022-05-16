@@ -28,3 +28,14 @@ def test_basic():
 
     hmm = db.find('4567123456')
     assert hmm is None
+
+def test_csv_basic():
+    db = PersonDB()
+    db.read_from_csv('data/standesregister.csv', encoding='cp1252')
+
+    caro = db.find('1234250497')
+    assert caro is not None
+    assert caro.svnr == '1234250497'
+    assert caro.firstname == 'Caro'
+    assert caro.lastname == 'Faschingbauer'
+    

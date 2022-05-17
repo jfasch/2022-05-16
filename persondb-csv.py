@@ -8,11 +8,7 @@ filename = sys.argv[1]
 svnr_search = sys.argv[2]
 
 db = PersonDB()
-
-f = open(filename, encoding='cp1252')
-rdr = csv.reader(f, delimiter=';', quotechar='"')
-for svnr, firstname, lastname in rdr:
-    db.insert(Person(svnr, firstname, lastname))
+db.read_from_csv(filename, encoding='cp1252')
 
 found = db.find(svnr_search)
 if found:

@@ -1,3 +1,7 @@
+from person import Person
+import csv
+
+
 class PersonDB:
     def __init__(self):
         self.persons = {}  # svnr -> Person
@@ -10,3 +14,10 @@ class PersonDB:
         
     def find(self, svnr):
         return self.persons.get(svnr)
+
+    def read_from_csv(self, filename, encoding):
+        f = open(filename, encoding=encoding)
+        rdr = csv.reader(f, delimiter=';', quotechar='"')
+        for svnr, firstname, lastname in rdr:
+            self.persons[svnr] = Person(svnr, firstname, lastname)
+
