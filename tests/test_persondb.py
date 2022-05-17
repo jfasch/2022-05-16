@@ -29,13 +29,22 @@ def test_basic():
     hmm = db.find('4567123456')
     assert hmm is None
 
-def test_csv_basic():
+def test_csv_basic(tmpdir):
+    # create file -> "fixture"
+    f = open(tmpdir / 'test.csv', 'w')
+    f.write('\n'.join([
+        '1037190666;Joerg;Faschingbauer',
+        '1234250497;Carolin;Faschingbauer',
+        ]))
+    f.close()
+
+    # test ...
     db = PersonDB()
-    db.read_from_csv('data/standesregister.csv', encoding='cp1252')
+    db.read_from_csv(tmpdir / 'test.csv', encoding='cp1252')
 
     caro = db.find('1234250497')
     assert caro is not None
     assert caro.svnr == '1234250497'
-    assert caro.firstname == 'Caro'
+    assert caro.firstname == 'Carolin'
     assert caro.lastname == 'Faschingbauer'
     
