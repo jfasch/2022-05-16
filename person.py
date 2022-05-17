@@ -6,9 +6,3 @@ class Person:
     def invert(self):
         self.firstname = self.firstname[::-1]
         self.lastname = self.lastname[::-1]
-
-    @staticmethod
-    def marry(l, r):
-        lastname = l.lastname
-        l.lastname += '-' + r.lastname
-        r.lastname += '-' + lastname
