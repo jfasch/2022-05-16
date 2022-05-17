@@ -1,5 +1,5 @@
 from person import Person
-from persondb import PersonDB
+from persondb import PersonDB  #, DuplicateError
 
 import pytest
 
@@ -48,3 +48,15 @@ def test_csv_basic(tmpdir):
     assert caro.firstname == 'Carolin'
     assert caro.lastname == 'Faschingbauer'
     
+
+@pytest.mark.xfail
+def test_duplicate_svnr():
+    db = PersonDB()
+
+    db.insert(Person('1037190666', 'Joerg', 'Faschingbauer'))
+    try:    
+        db.insert(Person('1037190666', 'Hansjoerg', 'Faschingbauer'))
+        assert False
+    except DuplicateError:
+        pass
+
