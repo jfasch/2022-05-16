@@ -1,22 +1,21 @@
 import sys
 import csv
 from person import Person
+from persondb import PersonDB
 
 
 filename = sys.argv[1]
 svnr_search = sys.argv[2]
 
-persons = []
+db = PersonDB()
 
 f = open(filename, encoding='cp1252')
 rdr = csv.reader(f, delimiter=';', quotechar='"')
 for svnr, firstname, lastname in rdr:
-    p = Person(svnr, firstname, lastname)
-    persons.append(p)
+    db.insert(Person(svnr, firstname, lastname))
 
-for p in persons:
-    if p.svnr == svnr_search:
-        print(f'SVNR: {p.svnr}, Firstname: {p.firstname}, Lastname: {p.lastname}')
-        break
+found = db.find(svnr_search)
+if found:
+    print(f'SVNR: {found.svnr}, Firstname: {found.firstname}, Lastname: {found.lastname}')
 else:
     print('not found')
