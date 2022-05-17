@@ -1,16 +1,21 @@
 from person import Person
-#from persondb import PersonDB
+from persondb import PersonDB
 
 import pytest
 
 
-@pytest.mark.xfail
 def test_basic():
     db = PersonDB()
 
-    db.insert(Person('1037190666', 'Joerg', 'Faschingbauer'))
-    db.insert(Person('1234250497', 'Caro', 'Faschingbauer'))
-    db.insert(Person('234511061995', 'Johanna', 'Faschingbauer'))
+    assert db.number_of_persons() == 0
+
+    joerg = Person('1037190666', 'Joerg', 'Faschingbauer')
+    caro = Person('1234250497', 'Caro', 'Faschingbauer')
+    johanna = Person('234511061995', 'Johanna', 'Faschingbauer')
+    
+    db.insert(joerg)
+    db.insert(caro)
+    db.insert(johanna)
 
     assert db.number_of_persons() == 3
 

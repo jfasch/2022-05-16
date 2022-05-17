@@ -20,14 +20,3 @@ for p in persons:
         break
 else:
     print('not found')
-
-# db = PersonDB()
-# db.read_from_csv(filename, encoding='cp1252')
-
-# found = db.find(svnr_search)
-
-# if found:
-#     print(f'SVNR: {p.svnr}, Firstname: {p.firstname}, Lastname: {p.lastname}')
-# else:
-#     print('not found')
-    
