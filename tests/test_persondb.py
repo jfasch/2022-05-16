@@ -54,9 +54,42 @@ def test_duplicate_svnr():
     db = PersonDB()
 
     db.insert(Person('1037190666', 'Joerg', 'Faschingbauer'))
-    try:    
+    try:
         db.insert(Person('1037190666', 'Hansjoerg', 'Faschingbauer'))
         assert False
-    except DuplicateError:
+    except DuplicateSVNRError:
         pass
 
+@pytest.mark.xfail
+def test_update_sunnycase():
+    db = PersonDB()
+
+    db.insert(Person('1037190666', 'Joerg', 'Faschingbauer'))
+    db.update(Person('1037190666', 'Hansjoerg, DI', 'Faschingbauer'))
+
+    found = db.find('1037190666')
+    assert found.svnr == '1037190666'
+    assert found.firstname == 'Hansjoerg, DI'
+    assert found.lastname == 'Faschingbauer'
+
+@pytest.mark.xfail
+def test_update_notexist():
+    db = PersonDB()
+
+    try:
+        db.update(Person('1234190666', 'Hansjoerg, DI', 'Faschingbauer'))
+        assert False
+    except SVNRNotExist:
+        pass
+
+@pytest.mark.xfail
+def test_update_exact_duplicate():
+    db = PersonDB()
+
+    db.insert(Person('1037190666', 'Joerg', 'Faschingbauer'))
+
+    try:
+        db.update(Person('1037190666', 'Joerg', 'Faschingbauer'))
+        assert False
+    except ExactDuplicateError:
+        pass
