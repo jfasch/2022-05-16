@@ -31,7 +31,7 @@ class PersonDB:
         f = open(filename, encoding=encoding)
         rdr = csv.reader(f, delimiter=';', quotechar='"')
         for svnr, firstname, lastname in rdr:
-            self.persons[svnr] = Person(svnr, firstname, lastname)
+            self.insert(Person(svnr, firstname, lastname))
 
 class DuplicateSVNRError(Exception):
     pass

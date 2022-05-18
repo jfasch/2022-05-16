@@ -48,7 +48,23 @@ def test_csv_basic(tmpdir):
     assert caro.firstname == 'Carolin'
     assert caro.lastname == 'Faschingbauer'
     
+def test_csv_duplicate(tmpdir):
+    # create file -> "fixture"
+    f = open(tmpdir / 'test.csv', 'w')
+    f.write('\n'.join([
+        '1037190666;Joerg;Faschingbauer',
+        '1037190666;Hansjoerg DI;Faschingbauer',
+        ]))
+    f.close()
 
+    # test ...
+    db = PersonDB()
+    try:
+        db.read_from_csv(tmpdir / 'test.csv', encoding='cp1252')
+        assert False
+    except DuplicateSVNRError:
+        pass
+    
 def test_duplicate_svnr():
     db = PersonDB()
 
