@@ -1,5 +1,5 @@
 from person import Person
-from persondb import PersonDB  #, DuplicateError
+from persondb import PersonDB, DuplicateSVNRError, SVNRNotExist, ExactDuplicateError
 
 import pytest
 
@@ -11,7 +11,7 @@ def test_basic():
 
     joerg = Person('1037190666', 'Joerg', 'Faschingbauer')
     caro = Person('1234250497', 'Caro', 'Faschingbauer')
-    johanna = Person('234511061995', 'Johanna', 'Faschingbauer')
+    johanna = Person('2345110695', 'Johanna', 'Faschingbauer')
     
     db.insert(joerg)
     db.insert(caro)
@@ -49,18 +49,17 @@ def test_csv_basic(tmpdir):
     assert caro.lastname == 'Faschingbauer'
     
 
-@pytest.mark.xfail
 def test_duplicate_svnr():
     db = PersonDB()
 
-    db.insert(Person('1037190666', 'Joerg', 'Faschingbauer'))
+    joerg = Person('1037190666', 'Joerg', 'Faschingbauer')
+    db.insert(joerg)
     try:
         db.insert(Person('1037190666', 'Hansjoerg', 'Faschingbauer'))
         assert False
-    except DuplicateSVNRError:
+    except DuplicateSVNRError as e:
         pass
 
-@pytest.mark.xfail
 def test_update_sunnycase():
     db = PersonDB()
 
@@ -72,7 +71,6 @@ def test_update_sunnycase():
     assert found.firstname == 'Hansjoerg, DI'
     assert found.lastname == 'Faschingbauer'
 
-@pytest.mark.xfail
 def test_update_notexist():
     db = PersonDB()
 
@@ -82,7 +80,6 @@ def test_update_notexist():
     except SVNRNotExist:
         pass
 
-@pytest.mark.xfail
 def test_update_exact_duplicate():
     db = PersonDB()
 

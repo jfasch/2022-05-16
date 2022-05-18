@@ -10,8 +10,20 @@ class PersonDB:
         return len(self.persons)
 
     def insert(self, person):
+        if person.svnr in self.persons:
+            raise DuplicateSVNRError(f'{person.svnr} already exists')
         self.persons[person.svnr] = person
-        
+
+    def update(self, person):
+        # low hanging fruit: errors
+        existing_person = self.persons.get(person.svnr)
+        if existing_person is None:
+            raise SVNRNotExist(f'{person.svnr} does not exist')
+        if existing_person.firstname == person.firstname and existing_person.lastname == person.lastname:
+            raise ExactDuplicateError(f'{person.svnr}: nothing to update')
+
+        self.persons[person.svnr] = person
+                
     def find(self, svnr):
         return self.persons.get(svnr)
 
@@ -21,3 +33,11 @@ class PersonDB:
         for svnr, firstname, lastname in rdr:
             self.persons[svnr] = Person(svnr, firstname, lastname)
 
+class DuplicateSVNRError(Exception):
+    pass
+
+class SVNRNotExist(Exception):
+    pass
+
+class ExactDuplicateError(Exception):
+    pass
