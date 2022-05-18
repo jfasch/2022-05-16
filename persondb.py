@@ -1,5 +1,7 @@
 from person import Person
 import csv
+import sqlite3
+import json
 
 
 class PersonDB:
@@ -32,6 +34,39 @@ class PersonDB:
         rdr = csv.reader(f, delimiter=';', quotechar='"')
         for svnr, firstname, lastname in rdr:
             self.insert(Person(svnr, firstname, lastname))
+
+    def read_from_sqlite3(self, filename):
+        connection = sqlite3.connect(filename)
+        cursor = connection.cursor()
+
+        resultset = cursor.execute('select * from persons;')
+        for svnr, firstname, lastname in resultset:
+            self.insert(Person(svnr, firstname, lastname))
+
+    def export_to_json(self):
+        l = []
+        for p in self.persons.values():
+            p_dict = {
+                'svnr': p.svnr,
+                'firstname': p.firstname,
+                'lastname': p.lastname,
+            }
+            l.append(p_dict)
+
+        return json.dumps(l)
+
+    def read_from_json(self, filename):
+        f = open(filename)
+        json_string = f.read()
+        person_dict_list = json.loads(json_string)
+
+        for person_dict in person_dict_list:
+            svnr = person_dict['svnr']
+            firstname = person_dict['firstname']
+            lastname = person_dict['lastname']
+
+            self.insert(Person(svnr, firstname, lastname))
+
 
 class DuplicateSVNRError(Exception):
     pass
